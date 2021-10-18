@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+	<br>
+	{% set name = g.user.firstname + " " + g.user.lastname %}
+	<h1>ORDER DETAILS</h1>
+	Customer Name:{{name}}
+	<br>
+	<div style="background-color:azure;border-style:ridge;border-radius:0.5px;width:40px;padding-top:2px;padding:auto">
+	{% set fname = 'images/' + book.img_name %}
+	<img src="{{url_for('static',filename=fname)}}" style="width:30px;height:40px" alt="Book Image">
+	<br><br>
+	</div>
+	<br>
+	Address:{{g.user.address}}
+	<br>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+    <!-- STYLE CSS -->
+		<link rel="stylesheet" href="{{ url_for('static',filename='css/style1.css')}}">
+</head>
+<body>
+
+    <div class="login-page">
+        <h2  style="color:white;text-align:center">Admin Login</h2>
+      <div class="form">
+          {% include "includes/message.html" %}
+        <form class="login-form" method="post" action="">
+          <input type="text" name="email" placeholder="username" required>
+          <input type="password" name="password" placeholder="password" required>
+          <button type="submit">login</button>
+<!--          <p class="message">Not registered? <a href="#">Create an account</a></p>-->
+        </form>
+     </div>
+   </div>
+</body>
+</html>
+

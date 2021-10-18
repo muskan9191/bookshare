@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container"  >
+    <div class="row text-center">
+        <div class="col-sm-3">
+
+        </div>
+        <div class="col-sm-6" style="background-color:azure;border-style:ridge;border-radius:5px;padding:30px;margin-top:20px">
+            {% set fname = 'images/' + book.img_name %}
+            <img src="{{url_for('static',filename=fname)}}" style="width:300px;height:400px" alt="Book Image">
+            <br><br>
+            <h3>{{book.title}}</h3>
+            <p>{{book.author}}</p>
+            <div style="margin-left:20px;margin-right:20px">
+                <a href="/address/{{book.srno}}" class="btn btn-primary" style="float:right">BUY NOW</a>
+                <h5 class="text-danger" style="float:left;"> ₹ {{book.price}}</h5>
+            </div>
+        </div>
+        <div class="col-sm-3">
+
+        </div>
+    </div>
+</div>
+{% endblock %}

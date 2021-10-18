@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+	<br>
+	<div class="row ">
+		<div class="col-sm-8">
+			{% set name = g.user.firstname + " " + g.user.lastname %}
+			<h1 style="color:green">The Order has been successfully placed.</h1>
+			<br>
+			<h1> ORDER ID : {{order.order_id}}</h1>
+			<br>
+			<h3>The Order will be Delivered at address {{order.address}} within 6 working Days.</h3>
+			<br>
+		</div>
+		<div class="col-sm-4 text-center">
+			<div style="background-color:azure;border-style:ridge;border-radius:5px;width:400px;padding-top:20px;padding:auto">
+            {% set fname = 'images/' + book.img_name %}
+            <img src="{{url_for('static',filename = fname)}}" style="width:300px;height:400px" alt="Book Image">
+            <br><br>
+            <h3>{{book.title}}</h3>
+            <p>By {{book.author}}</p>
+			<h5 class="text-danger"> ₹ {{book.price}}</h5>
+		</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

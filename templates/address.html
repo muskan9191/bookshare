@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+	<br>
+	<div class="row ">
+		<div class="col-sm-8">
+			<h3 class="text-center">Delivery Information</h3><br><br>
+			{% set name = g.user.firstname + " " + g.user.lastname %}
+			<form action="" method="POST" id="buy">
+				<label for="add" style="font-weight:bold">Delivery Address:</label> <br>
+				<textarea rows="4" cols="50" id="add" name="address" form="buy" required>{{name}}
+{{g.user.address}}</textarea>
+				<br><br>
+				<label for="pincode" style="font-weight:bold">Pincode:</label> <br>
+				<input type="number" id="pincode" name="pincode" required>
+				<br><br>
+				<label for="quantity" style="font-weight:bold">Quantity:</label> <br>
+				<input type="number" id="quantity" name="quantity" value="1" min="1" required>
+				<br><br>
+				<label for="price" style="font-weight:bold">Price:</label> <br>
+				<input type="number" id="price" name="price" value="{{book.price}}" readonly required>per item
+				<input type="hidden" id="cust_id" name="cust_id" value={{g.user.cust_id}} required>
+				<input type="hidden" id="book_id" name="book_id" value="{{book.book_id}}" required>
+				<input type="hidden" id="status" name="status" value="{{book.status}}" required>
+				<br><br>
+				<label  style="font-weight:bold">Choose the payment method:</label> <br>
+				<input type="radio" name="options" id="option1" value="COD" required>Cash On Delivery</input><br>
+                <input type="radio" name="options" id="option2" value="Online" required>Online Payment</input><br><br>
+				<button type="submit"  class="btn btn-primary">Place Order</button>
+			</form>
+		</div>
+		<div class="col-sm-4 text-center">
+			<div style="background-color:azure;border-style:ridge;border-radius:5px;width:400px;padding-top:20px;padding:auto">
+            {% set fname = 'images/' + book.img_name %}
+            <img src="{{url_for('static',filename=fname)}}" style="width:300px;height:400px" alt="Book Image">
+            <br><br>
+            <h3>{{book.title}}</h3>
+            <p>By {{book.author}}</p>
+			<h5 class="text-danger"> ₹ {{book.price}}</h5>
+		</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

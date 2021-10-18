@@ -1,0 +1,8 @@
+{
+  "params":
+  {
+    "upload_Location": ".\\static\\images",
+    "secret_key" : "this_bsdvhsbuywbvubjhsbdvh_key",
+    "merchant_key" : "Replace your merchant key"
+  }
+}

@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="container">
+	<br>
+	<div class="row ">
+		<div class="col-sm-8">
+			<h3 class="text-center">Pickup Information</h3><br><br>
+			{% set name = g.user.firstname + " " + g.user.lastname %}
+			<form action="" method="POST" id="resell">
+				<label for="add" style="font-weight:bold">Pickup Address:</label> <br>
+				<textarea rows="4" cols="50" id="add" name="address" form="resell" required>{{order.address}}</textarea>
+				<br><br>
+				<label for="phone" style="font-weight:bold">Phone:</label> <br>
+				<input type="number" id="phone" name="phone" value="{{g.user.phone}}" required>
+				<br><br>
+				<label for="quantity" style="font-weight:bold">Quantity:</label> <br>
+				<input type="number" id="quantity" name="quantity" value="1" min="1" max="{{order.quantity}}" required>
+				<br><br>
+				<label for="price" style="font-weight:bold">Price:</label> <br>
+				<input type="number" id="price" name="price" value="{{book.price}}" readonly required>per item
+				<input type="hidden" id="cust_id" name="cust_id" value={{g.user.cust_id}} required>
+				<input type="hidden" id="book_id" name="book_id" value="{{book.book_id}}" required>
+				<input type="hidden" id="status" name="status" value="{{book.status}}" required>
+				<br><br>
+				<button type="submit"  class="btn btn-primary">Confirm</button>
+			</form>
+		</div>
+		<div class="col-sm-4 text-center">
+			<div style="background-color:azure;border-style:ridge;border-radius:5px;width:400px;padding-top:20px;padding:auto">
+            {% set fname = 'images/' + book.img_name %}
+            <img src="{{url_for('static',filename=fname)}}" style="width:300px;height:400px" alt="Book Image">
+            <br><br>
+            <h3>{{book.title}}</h3>
+            <p>By {{book.author}}</p>
+			<h5 class="text-danger"> ₹ {{book.price}}</h5>
+		</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

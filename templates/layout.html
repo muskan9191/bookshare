@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>BOOKSHARE - Buy and Resell Books</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/sty.css')}}">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<!--		safe-->
+	<link href="https://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/darkly/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/stylish.css')}}">
+	<script src="{{ url_for('static',filename='js/carousal.js')}}"></script>
+    <style>
+        body
+        {
+        	color:Black;
+            background-color: white;
+
+        }
+    </style>
+<!--	safe-->
+
+</head>
+<body >
+
+<!-- ************************************************************-->
+<!-- navigation bar-->
+<nav class="navbar navbar-expand-lg navbar-dark " style="background-color: dodgerblue;">
+	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+	<span class="navbar-toggler-icon"></span>
+	</button>
+	<a class="navbar-brand" href="#">
+	<img src="{{ url_for('static',filename='images/logo.PNG')}}" width="200px" height="45px" >
+	</a>
+
+
+	<div class="collapse navbar-collapse" id="navbarSupportedContent">
+		<ul class="navbar-nav ml-auto">
+			<li class="nav-item ">
+				<a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="/myorders">MyOrders</a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="#">BookPay</a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="#">Reselled Books</a>
+			</li>
+			<li class="nav-item ">
+				<a class="nav-link" href="#">Contact Us</a>
+			</li>
+            <li class="nav-item active">
+				<a class="nav-link" href="#">Welcome {{g.user.firstname}}!</a>
+			</li>
+		</ul>
+
+	</div>
+
+</nav>
+<!-- navigation bar-->
+{% block body %}
+{% endblock %}
+<br>
+<br>
+<br>
+<div id="footer">
+		<div class="row">
+		<div class="col-sm-3" >
+			BookShare
+		</div>
+		<div class="col-sm-3 ">
+			Copyrights Reserved
+		</div>
+		<div class="col-sm-3 ">
+			Terms and Conditions
+		</div>
+		<div class="col-sm-3 ">
+			All Rights Reserved
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

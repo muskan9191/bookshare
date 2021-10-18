@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+
+
+<div class="Container">
+    <br>
+    <h1 style="text-align:center;"> Your Orders </h1>
+    <br>
+    {% for book,order in packed: %}
+
+        <div class="row " style="padding:20px;background-color:cornsilk;margin:10px 10px 10px 10px;border:1px solid black;border-radius:10px;">
+        {% set fname = 'images/' + book.img_name %}
+            <div class="col-sm-3" style="text-align:center">
+                <h3>{{order.order_id}}</h3><hr>
+                <a href="buy/{{book.srno}}" class="m-auto"><img  src="{{ url_for('static',filename=fname) }}"
+                                                            alt="Card image" style="width:140px;height:180px;"></a>
+            </div>
+            <div class="col-sm-5" style="margin-top:40px;text-align:center">
+                <h1>{{book.title}}</h1>
+                <h3>{{book.author}}</h3><br>
+<!--                <form action="" method="POST">-->
+<!--                    <input type="hidden" value="{{order.order_id}}" name="order_id">-->
+<!--                    <input type="hidden" value="{{book.book_id}}" name="img_name">-->
+                    <a class="btn" href="resell/{{order.order_id}}/{{book.book_id}}"  style="background-color:#ff6666;color:white;width:100px">Resell</a>
+<!--                </form>-->
+
+            </div>
+            <div class="col-sm-4">
+                <h2 style="color:;">Order Details</h2><hr>
+                {{order.order_id}}<br>
+                Quantity:&nbsp{{order.quantity}}<br>
+                Order Amount:&nbsp{{order.amount}}<br>
+                Address:&nbsp{{order.address}}<br>
+                Mode of Payment:&nbsp{{order.payment_method}}<br>
+                Order was placed on {{order.date}}
+
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+
+
+

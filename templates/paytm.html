@@ -1,0 +1,28 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paytm Merchant - Payment Page</title>
+</head>
+<body>
+<h1>Redirecting you....</h1>
+<h2>Please do not refresh this page</h2>
+<form action="https://securegw.paytm.in/order/process" method="POST" name="paytm">
+<input type="hidden" name="MID" value="{{MID}}"/>
+<input type="hidden" name="CHECKSUMHASH" value="{{CHECKSUMHASH}}"/>
+<input type="hidden" name="ORDER_ID" value="{{ORDER_ID}}"/>
+<input type="hidden" name="TXN_AMOUNT" value="{{amount}}"/>
+<input type="hidden" name="CUST_ID" value="{{cust_id}}"/>
+<input type="hidden" name="INDUSTRY_TYPE_ID" value="{{industry_name}}"/>
+<input type="hidden" name="WEBSITE" value="{{Website}}"/>
+<input type="hidden" name="CHANNEL_ID" value="{{Channel_id}}"/>
+<input type="hidden" name="CALLBACK_URL" value="{{callback}}"/>
+
+</form>
+</body>
+<script>
+
+    document.paytm.submit()
+<!--This will make form submit automatically-->
+</script>
+</html>

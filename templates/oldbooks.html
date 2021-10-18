@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<!-- Carousal-->
+<div id="demo" class="carousel slide" data-ride="carousel">
+
+  <!-- Indicators -->
+  <ul class="carousel-indicators">
+    <li data-target="#demo" data-slide-to="0" class="active"></li>
+    <li data-target="#demo" data-slide-to="1"></li>
+    <li data-target="#demo" data-slide-to="2"></li>
+  </ul>
+
+  <!-- The slideshow -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{{ url_for('static',filename='images/a.jpg')}}" alt="slide" width="1900px" height="300px" >
+      <div class="carousel-caption d-none d-md-block">
+        <h1>BOOKSHARE</h1>
+        <p>Buy & Resell Books</p>
+        <span class="active-cyan-3 active-cyan-4 mb-4">
+  			<input class="form-control" type="text" placeholder="Search For Books" aria-label="Search">
+		</span>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static',filename='images/d.jpg')}}" alt="slide" width="1900px" height="300px">
+      <div class="carousel-caption d-none d-md-block">
+        <h1>BOOKSHARE</h1>
+        <p>Buy & Resell Books</p>
+        <span class="active-cyan-3 active-cyan-4 mb-4">
+  			<input class="form-control" type="text" placeholder="Search For Books" aria-label="Search ">
+		</span>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{{ url_for('static',filename='images/c.jpg')}}" alt="slide" width="1900px" height="300px">
+      <div class="carousel-caption d-none d-md-block">
+        <h1>BOOKSHARE</h1>
+        <p>Buy & Resell Books</p>
+        <span class="active-cyan-3 active-cyan-4 mb-4">
+  			<input class="form-control" type="text" placeholder="Search For Books" aria-label="Search ">
+		</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Left and right controls -->
+  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </a>
+  <a class="carousel-control-next" href="#demo" data-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </a>
+</div>
+<!-- Carousal-->
+
+<!-- ************************************************************-->
+
+<div class="Container">
+	<div class="row " style="margin:40px ">
+
+		{% for book in books %}
+
+				<div class="col-sm-3">
+					<div class="card" style="width:300px;margin-top:10px;margin-bottom:20px;height:320px;padding-top:20px;background-color:azure;border-radius:5px;">
+						{% set fname = 'images/' + book.img_name %}
+						<a href="buy/{{book.srno}}" class="m-auto"><img class="card-img-top m-auto " src="{{ url_for('static',filename=fname) }}"
+                                                         alt="Card image" style="width:140px;height:180px;margin-top:30px"></a>
+						<div class="card-body">
+							<h4 class="card-title" style="text-align: center;">{{book.title}}</h4>
+							<p class="card-text" style="text-align: center;">{{book.author}}</p>
+<!--							<div>-->
+<!--								<a href="buy/{{book.srno}}" class="btn btn-primary" style="float:right">BUY NOW</a>-->
+<!--								<h5 class="text-danger" style="float:left;"> ₹ {{book.price}}</h5>-->
+<!--						    </div>-->
+						</div>
+					</div>
+				</div>
+
+		{% endfor %}
+
+	</div>
+</div>
+
+{% endblock %}
