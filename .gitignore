@@ -1,0 +1,89 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Flask / instance folder
+instance/
+*.db
+*.sqlite3
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Logs and local files
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite
+*.sqlite3
+.DS_Store
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.xml
+*.cover
+.hypothesis/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# Environment variables file
+.env
+.env.*
+*.env
+
+# Node modules (if frontend part exists)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Caches
+.cache/
+__pycache__/
+.pytest_cache/
+
+# Static build artifacts
+/staticfiles/
+*.gz
+*.map
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+
+# Docker
+*.pid
+*.tar
+docker-compose.override.yml

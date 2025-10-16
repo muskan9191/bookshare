@@ -1,68 +1,14 @@
-from flask import Flask, render_template, request, session, url_for, flash,g
-from flask_sqlalchemy import SQLAlchemy
+from flask import render_template, request, session, url_for, flash, g, Blueprint, current_app
 from datetime import datetime
 import os
 import random
 from werkzeug.utils import secure_filename, redirect
-from PayTm import Checksum
-# from flask_wtf import CSRFProtect
-import json
-app = Flask(__name__)
-db = SQLAlchemy(app)
+from .payment_gateway import Checksum
+from .models import Users, Books, Orders, Orderstemp, db
 
-with open('config.json',"r") as C:
-    params = json.load(C)["params"]
+main = Blueprint('main', __name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:@localhost/bookshare"
-app.config['UPLOAD_FOLDER']=params['upload_Location']
-app.secret_key = params['secret_key']
-#Provided by Paytm
-MERCHANT_KEY = params['merchant_key']
-
-# csrf = CSRFProtect(app)
-class Books(db.Model):
-    srno = db.Column(db.Integer, primary_key=True)
-    book_id = db.Column(db.String(10),  nullable=False)
-    title = db.Column(db.String(50), nullable=False)
-    img_name = db.Column(db.String(20), nullable=False)
-    author = db.Column(db.String(50), nullable=False)
-    price = db.Column(db.Float, nullable=False)
-    status = db.Column(db.String(5), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-
-class Orders(db.Model):
-    order_id = db.Column(db.Integer, primary_key=True)
-    book_id = db.Column(db.String(10),  nullable=False)
-    cust_id = db.Column(db.Integer, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.String(10),nullable=False)
-    address = db.Column(db.String(50), nullable=False)
-    payment_method = db.Column(db.String(20), nullable=False)
-    resell_status = db.Column(db.String(20), nullable=True)
-
-class Orderstemp(db.Model):
-    order_id = db.Column(db.Integer, primary_key=True)
-    book_id = db.Column(db.String(10),  nullable=False)
-    cust_id = db.Column(db.Integer, nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
-    amount = db.Column(db.Float, nullable=False)
-    date = db.Column(db.String(10), nullable=False)
-    address = db.Column(db.String(50), nullable=False)
-    payment_method = db.Column(db.String(20), nullable=False)
-
-
-class Users(db.Model):
-    cust_id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(20), nullable=False)
-    lastname = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(20), nullable=False)
-    phone = db.Column(db.Integer, nullable=False)
-    address = db.Column(db.String(50), nullable=False)
-
-
-@app.before_request
+@main.before_request
 def before_request():
     g.user = None
     g.admin = None
@@ -73,7 +19,7 @@ def before_request():
         g.admin = "admin"
 
 #signup form
-@app.route("/signup",methods=["GET", "POST"])
+@main.route("/signup",methods=["GET", "POST"])
 def signup():
     session.pop('email', None)
     if request.method == "POST":
@@ -97,7 +43,7 @@ def signup():
             return redirect(url_for('signup'))
     return render_template("signup.html")
 
-@app.route("/", methods=["GET","POST"])
+@main.route("/", methods=["GET","POST"])
 def login():
     session.pop('email', None)
     if request.method == "POST":
@@ -107,13 +53,14 @@ def login():
         if cheka:
             session['cust_id'] = cheka.cust_id
             session['email'] = email
+            return render_template("homepage.html")
             return redirect(url_for('home'))
         else:
             flash("The Email and Password does not match our records", "danger")
             return redirect(url_for('login'))
     return render_template("index.html")
 
-@app.route("/home")
+@main.route("/home")
 def home():
     if not g.user:
         return redirect(url_for('login'))
@@ -121,28 +68,28 @@ def home():
     # return render_template("homepage.html", books=deca)
     return render_template("homepage.html")
 
-@app.route("/newbooks")
+@main.route("/newbooks")
 def newbooks():
     if not g.user:
         return redirect(url_for('login'))
     deca = Books.query.filter_by(status="new").all()
     return render_template("newbooks.html", books=deca,status="new")
 
-@app.route("/oldbooks")
+@main.route("/oldbooks")
 def oldbooks():
     if not g.user:
         return redirect(url_for('login'))
     deca = Books.query.filter_by(status="old").all()
     return render_template("oldbooks.html", books=deca,status="old")
 
-@app.route("/buy/<string:sno>", methods=['GET','POST'])
+@main.route("/buy/<string:sno>", methods=['GET','POST'])
 def buy(sno):
     if not g.user:
         return redirect(url_for('login'))
     book = Books.query.filter_by(srno=sno).first()
     return render_template('buy.html', book=book)
 
-@app.route("/address/<string:sno>", methods=['GET','POST'])
+@main.route("/address/<string:sno>", methods=['GET','POST'])
 def address(sno):
     if not g.user:
         return redirect(url_for('login'))
@@ -193,7 +140,7 @@ def address(sno):
                 'CALLBACK_URL': 'http://127.0.0.1:5000/handlerequest',
             }
             # checksumhash is generated
-            param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+            param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, current_app.config['MERCHANT_KEY'])
             #AN intermdiate page will be used to give a post request to Paytm
             return render_template("paytm.html", MID='ViuoXq02464757024003', ORDER_ID=order_id, amount=str(amount),
                                    cust_id='Customer', industry_name="Retail", Channel_id="WEB", Website="DEFAULT",
@@ -202,7 +149,7 @@ def address(sno):
     book = Books.query.filter_by(srno=sno).first()
     return render_template("address.html" ,book = book)
 
-@app.route("/order/<string:sno>")
+@main.route("/order/<string:sno>")
 def order(sno):
     if not g.user:
         return redirect(url_for('login'))
@@ -211,7 +158,7 @@ def order(sno):
     order = Orders.query.filter_by(order_id = order_id).first()
     return render_template('order.html', book=book,order=order)
 
-@app.route("/handlerequest", methods=["GET", "POST"])
+@main.route("/handlerequest", methods=["GET", "POST"])
 def handlerequest():
     if request.method == "POST":
         b = request.get_data().decode("utf-8")
@@ -251,7 +198,7 @@ def handlerequest():
 # BANKTXNID:,CHECKSUMHASH:Z%2Bu2wlpLPsp4U7CesNUdqWvvCJGDx%2BfWYJyh2xaI7NeHcw9Y3grdWiS4N3Ket46znqje2yaoMpS%2BopNSUy9i0LhsnzvDsbPslhkf8AKwBn0%3D,
 # CURRENCY:INR,MID:ViuoXq02464757024003,ORDERID:ORD-1101553215637,RESPCODE:501,RESPMSG:System+Error,STATUS:TXN_FAILURE,TXNAMOUNT:1.00
 
-@app.route("/myorders", methods=['GET','POST'])
+@main.route("/myorders", methods=['GET','POST'])
 def myorders():
     if not g.user:
         return redirect(url_for('login'))
@@ -268,7 +215,7 @@ def myorders():
         books.append(Books.query.filter_by(book_id=book_id).first())
     return render_template('myorders.html',packed = zip(books,orders))
 
-@app.route("/resell/<string:order_id>/<string:book_id>")
+@main.route("/resell/<string:order_id>/<string:book_id>")
 def resell(order_id,book_id):
     if not g.user:
         return redirect(url_for('login'))
@@ -276,14 +223,14 @@ def resell(order_id,book_id):
     order = Orders.query.filter_by(order_id=order_id).first()
     return render_template("resell.html",book=book,order=order)
 
-@app.route("/bookPay")
+@main.route("/bookPay")
 def bookpay():
     if not g.user:
         return redirect(url_for('login'))
     return render_template("bookpay.html")
 
 
-@app.route("/admin", methods=["GET","POST"])
+@main.route("/admin", methods=["GET","POST"])
 def admin():
     if request.method == "POST":
         email = request.form.get('email')
@@ -296,12 +243,12 @@ def admin():
             return redirect(url_for('admin'))
     return render_template("admin.html")
 
-@app.route("/adminlogout", methods=["GET","POST"])
+@main.route("/adminlogout", methods=["GET","POST"])
 def adminlogout():
     session.pop('admin', None)
     return redirect(url_for('admin'))
 
-@app.route("/dashboard", methods=["GET","POST"])
+@main.route("/dashboard", methods=["GET","POST"])
 def dashboard():
     if not g.admin:
         return redirect(url_for('admin'))
@@ -316,7 +263,7 @@ def dashboard():
         print(book)
         deca = Books.query.filter_by(book_id = book,status = "new").first()
         if deca is None:
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
+            f.save(os.path.join(current_app.config['UPLOAD_FOLDER'], secure_filename(f.filename)))
             peca = Books(book_id = book,title=title,author=author,quantity=nob,img_name=f.filename,price=price,status="new")
             db.session.add(peca)
             db.session.commit()
@@ -330,6 +277,3 @@ def dashboard():
             flash("Uploaded Successfully(already present quantity incremented)", "Success")
             return redirect(url_for('dashboard'))
     return render_template("dashboard.html")
-
-if __name__=="__main__":
-    app.run(debug=True)
