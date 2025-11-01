@@ -9,9 +9,11 @@ def create_app():
     app.config.from_object(Config)
     
     db.init_app(app)
-
+    
     # Import routes
     from .routes import main
+    from bookshare import models
+  
     app.register_blueprint(main)
 
     return app
